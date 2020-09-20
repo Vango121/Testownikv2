@@ -68,6 +68,7 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         Toast.makeText(getContext(), whichQuiz, Toast.LENGTH_SHORT).show();
 //        mViewModel = new ViewModelProvider(this,quizViewModelFactory).get(QuizViewModel.class);
         binding.setHandler(this);
+        binding.setViewmodel(mViewModel);
 //        mViewModel.getQuestions(whichQuiz);
 //        mViewModel.questions.observe(getViewLifecycleOwner(), quizModel -> {
 //            mViewModel.nextQuestion();
@@ -83,29 +84,65 @@ public class QuizFragment extends Fragment implements ButtonHandler{
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==android.R.id.home){
             ((MainActivity)getActivity()).replaceFragment(MainFragment.class,"");
+            mViewModel.update(whichQuiz);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+    int rowcount;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         mViewModel = new ViewModelProvider(this,quizViewModelFactory).get(QuizViewModel.class);
         mViewModel.getQuestions(whichQuiz);
-        mViewModel.questions.observe(getViewLifecycleOwner(), quizModel -> {
-            mViewModel.nextQuestion();
+        mViewModel.rowCount.observe(getViewLifecycleOwner(), integer ->{
+            rowcount=integer;
+                }
+        );
+        mViewModel.questionsLiveData().observe(getViewLifecycleOwner(),event->{
+            List<QuizModel> quizModel= event.getContentIfNotHandled();
+            mViewModel.setQuestions(quizModel);
+            mViewModel.getNumberOfQuestions();
+            if(binding.buttonA.getText().equals("Button")){
+                mViewModel.nextQuestion();
+            }
+
         });
+        mViewModel.retrofit.observe(getViewLifecycleOwner(),quizModels -> {
+            if (rowcount == 0) {
+                mViewModel.insert(whichQuiz);
+            }
+            else {
+                mViewModel.update(whichQuiz);
+            }
+        });
+//        mViewModel.questionsLiveData.observe(getViewLifecycleOwner(), quizModel -> {
+//            quizModel.getContentIfNotHandled()
+//            mViewModel.setQuestions(quizModel);
+//            mViewModel.getNumberOfQuestions();
+//            if (rowcount == 0) {
+//                mViewModel.insert(whichQuiz);
+//            }
+//            else {
+//                mViewModel.update(whichQuiz);
+//            }
+//            //mViewModel.nextQuestion();
+//
+//        });
         mViewModel.nextQuestion.observe(getViewLifecycleOwner(),question->{
             setQuestion(question);
             currentquestion=question;
         });
-        mViewModel.questionCount.observe(getViewLifecycleOwner(), questionCount->{
-            binding.animateProgressBar.setMax(questionCount);
+//        mViewModel.questionCount.observe(getViewLifecycleOwner(), questionCount->{
+//            binding.animateProgressBar.setMax(questionCount);
+//        });
+//        mViewModel.goodAnswers.observe(getViewLifecycleOwner(), goodAnswers->{
+//            binding.animateProgressBar.setProgress(goodAnswers);
+//        });
+        mViewModel.questionsMiernictwo.observe(getViewLifecycleOwner(), miernictwos -> {
+            mViewModel.cast();
         });
-        mViewModel.goodAnswers.observe(getViewLifecycleOwner(), goodAnswers->{
-            binding.animateProgressBar.setProgress(goodAnswers);
-        });
-
 //        mViewModel.questions.observe(getViewLifecycleOwner(), quizModel -> {
 //            Log.i("tag",quizModel.get(0).getQuestion());
 //        });
@@ -119,7 +156,7 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         Random rand = new Random();
         int buttonNumber;
         binding.question.setText(question.getQuestion());
-        binding.licznik.setText("Pozostałe powtórzenia: "+question.getCoount());
+        binding.licznik.setText("Pozostałe powtórzenia: "+question.getCount());
         buttonNumber=rand.nextInt(4);
         buttons.get(buttonNumber).setText(question.getAnswerA().getAnswer());
         buttons.get(buttonNumber).setTag(question.getAnswerA());

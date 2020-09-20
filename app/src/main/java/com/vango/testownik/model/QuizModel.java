@@ -1,16 +1,21 @@
 package com.vango.testownik.model;
 
+import com.vango.testownik.model.room.Miernictwo;
+
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 public class QuizModel {
-
+    @PrimaryKey
     private Integer id;
     private String question;
     private Answer answerA;
     private Answer answerB;
     private Answer answerC;
     private Answer answerD;
-    private Integer count = 5;
+   // @ColumnInfo(defaultValue = "5")
+    private Integer count;
 
 
     public QuizModel(Integer id, String question, Answer answerA, Answer answerB, Answer answerC, Answer answerD) {
@@ -75,11 +80,27 @@ public class QuizModel {
     public void setAnswerD(Answer answerD) {
         this.answerD = answerD;
     }
-    public Integer getCoount() {
+
+
+    public Integer getCount() {
+        if(count == null){
+            return 5;
+        }
         return count;
     }
 
-    public void setCoount(Integer coount) {
-        this.count = coount;
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public void answerGood(){
+        count= getCount()-1;
+    }
+    public void answerWrong(){
+        count= getCount()+3;
+    }
+
+    public QuizModel cast(String whichQuiz){
+        return new Miernictwo(id,question,answerA,answerB,answerC,answerD);
     }
 }

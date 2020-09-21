@@ -34,7 +34,7 @@ public class RetrofitModule {
         Gson gson =new GsonBuilder().setLenient()
                 .registerTypeAdapter(type, new QuizConverter()).create();
        Retrofit retrofit= new Retrofit.Builder()
-                .baseUrl("http://hackheroes.cba.pl/")
+                .baseUrl("https://hackheroes.cba.pl/")
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)

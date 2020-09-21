@@ -1,5 +1,6 @@
 package com.vango.testownik.room.Dao;
 
+import com.vango.testownik.model.Answer;
 import com.vango.testownik.model.room.Miernictwo;
 
 import java.util.List;
@@ -24,4 +25,7 @@ public interface MiernictwoDao {
 
     @Query("SELECT COUNT(id) FROM miernictwo_table")
     LiveData<Integer> getRowCount();
+
+    @Query("UPDATE miernictwo_table SET question = :question , answerA = :answerA, answerB = :answerB, answerC= :answerC, answerD= :answerD WHERE id = :itemid  ")
+    void updateWithoutCount(Integer itemid,String question, Answer answerA,Answer answerB,Answer answerC,Answer answerD);
 }

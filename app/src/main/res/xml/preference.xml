@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <ListPreference
+        android:key="Multiply"
+        android:title="Powtórzenia"
+        android:summary="Wybierz ilość powtórzeń danego pytania"
+        android:defaultValue="5"
+        android:entries="@array/Values"
+        android:entryValues="@array/Values"
+
+        />
+    <ListPreference
+        android:key="Wrong"
+        android:title="Błędne Odpowiedzi"
+        android:summary="Wybierz o ile więcej razy pojawi się pytanie, po błędnej odpowiedzi"
+        android:defaultValue="3"
+        android:entries="@array/Values"
+        android:entryValues="@array/Values"
+
+        />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="Autosave"
+        android:title="Zapis"
+        android:summaryOn="Zapis postępu włączony. Kliknij, aby wyłączyć"
+        android:summaryOff="Zapis postępu wyłączony. Kliknij, aby włączyć"
+        />
+
+</androidx.preference.PreferenceScreen>

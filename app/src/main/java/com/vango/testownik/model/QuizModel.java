@@ -14,10 +14,10 @@ public class QuizModel {
     private Answer answerB;
     private Answer answerC;
     private Answer answerD;
-   // @ColumnInfo(defaultValue = "5")
-    private Integer count;
+    @ColumnInfo(defaultValue = "5")
+    private Integer count = 5;
 
-
+    public static Integer wrong=3;
     public QuizModel(Integer id, String question, Answer answerA, Answer answerB, Answer answerC, Answer answerD) {
         this.id = id;
         this.question = question;
@@ -34,6 +34,10 @@ public class QuizModel {
         this.answerC = answerC;
         this.answerD = answerD;
     }
+
+    public QuizModel(Integer id, String question, Answer answerA, Answer answerB, Answer answerC, Answer answerD, Integer count) {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -83,9 +87,6 @@ public class QuizModel {
 
 
     public Integer getCount() {
-        if(count == null){
-            return 5;
-        }
         return count;
     }
 
@@ -97,10 +98,11 @@ public class QuizModel {
         count= getCount()-1;
     }
     public void answerWrong(){
-        count= getCount()+3;
+        count= getCount()+wrong;
     }
 
     public QuizModel cast(String whichQuiz){
         return new Miernictwo(id,question,answerA,answerB,answerC,answerD);
     }
+
 }

@@ -83,8 +83,9 @@ public class QuizFragment extends Fragment implements ButtonHandler{
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId()==android.R.id.home){
+            mViewModel.saveCount(whichQuiz);
             ((MainActivity)getActivity()).replaceFragment(MainFragment.class,"");
-            mViewModel.update(whichQuiz);
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -95,26 +96,29 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         super.onActivityCreated(savedInstanceState);
 
         mViewModel = new ViewModelProvider(this,quizViewModelFactory).get(QuizViewModel.class);
+        mViewModel.getCount(whichQuiz);
         mViewModel.getQuestions(whichQuiz);
         mViewModel.rowCount.observe(getViewLifecycleOwner(), integer ->{
             rowcount=integer;
+            Log.i("rowcount",integer+"");
                 }
         );
         mViewModel.questionsLiveData().observe(getViewLifecycleOwner(),event->{
             List<QuizModel> quizModel= event.getContentIfNotHandled();
+            Log.i("quizModel",quizModel.size()+"");
             mViewModel.setQuestions(quizModel);
             mViewModel.getNumberOfQuestions();
             if(binding.buttonA.getText().equals("Button")){
                 mViewModel.nextQuestion();
             }
-
         });
         mViewModel.retrofit.observe(getViewLifecycleOwner(),quizModels -> {
             if (rowcount == 0) {
                 mViewModel.insert(whichQuiz);
+                Log.i("insert","insert");
             }
             else {
-                mViewModel.update(whichQuiz);
+                mViewModel.updateRetrofit(quizModels,whichQuiz);
             }
         });
 //        mViewModel.questionsLiveData.observe(getViewLifecycleOwner(), quizModel -> {
@@ -134,12 +138,12 @@ public class QuizFragment extends Fragment implements ButtonHandler{
             setQuestion(question);
             currentquestion=question;
         });
-//        mViewModel.questionCount.observe(getViewLifecycleOwner(), questionCount->{
-//            binding.animateProgressBar.setMax(questionCount);
-//        });
-//        mViewModel.goodAnswers.observe(getViewLifecycleOwner(), goodAnswers->{
-//            binding.animateProgressBar.setProgress(goodAnswers);
-//        });
+        mViewModel.questionCount.observe(getViewLifecycleOwner(), questionCount->{
+            binding.animateProgressBar.setMax(questionCount);
+        });
+        mViewModel.goodAnswers.observe(getViewLifecycleOwner(), goodAnswers->{
+            binding.animateProgressBar.setProgress(goodAnswers);
+        });
         mViewModel.questionsMiernictwo.observe(getViewLifecycleOwner(), miernictwos -> {
             mViewModel.cast();
         });

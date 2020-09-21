@@ -17,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -26,6 +29,7 @@ import com.vango.testownik.R;
 import com.vango.testownik.databinding.MainFragmentBinding;
 import com.vango.testownik.model.MainModel;
 import com.vango.testownik.ui.QuizFragment;
+import com.vango.testownik.ui.SettingsFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,10 +62,24 @@ public class MainFragment extends Fragment implements MainAdapter.OnNoteListener
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#B0CAFF")));
         actionBar.setDisplayHomeAsUpEnabled(false);
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        setHasOptionsMenu(true);
         mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         setRecyclerView();
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.Ustawienia){
+            ((MainActivity)getActivity()).replaceFragment(SettingsFragment.class,"Settings");
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void setRecyclerView(){

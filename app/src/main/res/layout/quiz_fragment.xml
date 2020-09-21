@@ -119,8 +119,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
-        android:max="@={viewmodel.questionCount}"
-        android:progress="@={viewmodel.goodAnswers}"
         app:ahp_backgroundColor="@color/ProgressBarBottom"
         app:ahp_progressColor="@color/ProgressBar"
         app:layout_constraintBottom_toTopOf="@+id/guidelineProgressBottom"
@@ -254,5 +252,6 @@
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/guideline10"
         app:layout_constraintBottom_toTopOf="@+id/guideline11"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

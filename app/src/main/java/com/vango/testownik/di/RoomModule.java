@@ -25,7 +25,7 @@ public class RoomModule {
                 .databaseBuilder(
                         context,
                         QuizDatabase.class,
-                "quiz_db")
+                "quiz_db4")
                 .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
                 .build();

@@ -36,13 +36,24 @@ public class QuizViewModel extends ViewModel {
     List<QuizModel> questions = new ArrayList<>();
     Integer repeatsCount; // count all questions including count parameter inside question
     LiveData<Integer> rowCount;
+    List<Integer> countList = new ArrayList<>();
+    Boolean saveEnabled;
+    Integer startingCount; // Count value on start without save
     @ViewModelInject
     public QuizViewModel(Repository repository, SavedStateHandle savedStateHandle) {
         this.repository = repository;
         this.savedStateHandle = savedStateHandle;
         rowCount=repository.getRowCount();
+        QuizModel.wrong=Integer.parseInt(repository.getWrongMultipler());
+        saveEnabled=repository.getIsSave();
+        startingCount = Integer.parseInt(repository.getStartingCount());
     }
+    void getCount(String quizName){
+        if(saveEnabled){ // is save turned on in settings
+            countList =repository.getCount(quizName);
+        }
 
+    }
     void getQuestions(String quizName){
         if(quizName.equals("Miernictwo")){
             questionsMiernictwo = repository.getAll();
@@ -53,30 +64,52 @@ public class QuizViewModel extends ViewModel {
     void cast(){
         List<QuizModel> quizModelList = new ArrayList<>();
         for (int i = 0; i <questionsMiernictwo.getValue().size(); i++) {
-            quizModelList.add(questionsMiernictwo.getValue().get(i).cast());
-            Log.i("questionsMiernictwo",questionsMiernictwo.getValue().get(i).getQuestion());
+            quizModelList.add(questionsMiernictwo.getValue().get(i).cast("Miernictwo"));
+            if(countList.size()==questionsMiernictwo.getValue().size()){
+                quizModelList.get(i).setCount(countList.get(i));
+            }else{
+                quizModelList.get(i).setCount(startingCount);
+            }
         }
         _questionsLiveData.postValue(new Event<>(quizModelList));
     }
     void setQuestions(List<QuizModel> list){
         questions= list;
     }
-        void update(String quizName){
-            if(quizName.equals("Miernictwo")){
-                for (int i = 0; i <questions.size() ; i++) {
-                    repository.update((Miernictwo)questions.get(i).cast(quizName));
-                }
-            }
-        }
-    void insert(String quizName){
+
+    void saveCount(String quizName){
+        repository.saveCount(questions,quizName);
+    }
+
+
+    void update(String quizName){
         if(quizName.equals("Miernictwo")){
             for (int i = 0; i <questions.size() ; i++) {
-                repository.insert((Miernictwo) questions.get(i).cast(quizName));
+                repository.update((Miernictwo)questions.get(i).cast(quizName));
             }
         }
     }
+    void updateRetrofit(List<QuizModel> list, String quizName){
+        if(quizName.equals("Miernictwo")){
+            for (int i = 0; i <list.size(); i++) {
+                repository.update((Miernictwo)list.get(i).cast(quizName));
+            }
+        }
+
+    }
+    void insert(String quizName){
+        if(quizName.equals("Miernictwo")){
+            for (int i = 0; i <retrofit.getValue().size() ; i++) {
+                repository.insert((Miernictwo) retrofit.getValue().get(i).cast(quizName));
+            }
+        }
+    }
+
     void nextQuestion(){
+        Log.i("repeats",repeatsCount+"");
         if(repeatsCount!=0){
+
+            Log.i("nextquestion","true");
             Random rand = new Random();
             int nextId = rand.nextInt((questions.size()) );
             Log.i("nextint",nextId+"");
@@ -89,7 +122,7 @@ public class QuizViewModel extends ViewModel {
             currentId=nextId;
         }
         else{
-            //TODO("End of testownik")
+            Log.i("koniec","koniec");
         }
     }
     public Boolean checkAnswers(Button[] buttons, boolean[] buttonsChecked){

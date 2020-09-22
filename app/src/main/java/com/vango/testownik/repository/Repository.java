@@ -9,7 +9,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vango.testownik.model.QuizModel;
 import com.vango.testownik.model.room.Miernictwo;
+import com.vango.testownik.model.room.Pair;
 import com.vango.testownik.room.Dao.MiernictwoDao;
+import com.vango.testownik.room.Dao.PairDao;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -31,12 +33,14 @@ public class Repository {
     Retrofit retrofit;
     MiernictwoDao miernictwoDao;
     Context context;
+    PairDao pairDao;
     private MutableLiveData<List<QuizModel>> questions = new MutableLiveData<>();
     @Inject
-    public Repository(Retrofit retrofit, MiernictwoDao miernictwoDao, @ApplicationContext Context context) {
+    public Repository(Retrofit retrofit, MiernictwoDao miernictwoDao, PairDao pairDao, @ApplicationContext Context context) {
         this.retrofit = retrofit;
         this.miernictwoDao=miernictwoDao;
         this.context=context;
+        this.pairDao=pairDao;
     }
     public LiveData<List<QuizModel>> getData(String table){
         Call<List<QuizModel>> call= retrofit.getRetrofitInterface().getQuestions(table);
@@ -54,16 +58,28 @@ public class Repository {
         return questions;
     }
     public void insert(Miernictwo miernictwo){
-        Completable.fromAction(() -> miernictwoDao.insert(miernictwo)).subscribeOn(Schedulers.io()).subscribe();
+            Completable.fromAction(() -> miernictwoDao.insert(miernictwo)).subscribeOn(Schedulers.io()).subscribe();
         //miernictwoDao.insert(miernictwo);
     }
+    public void insertPair(Pair pair){
+        Completable.fromAction(() -> pairDao.insert(pair)).subscribeOn(Schedulers.io()).subscribe();
+        //miernictwoDao.insert(miernictwo);
+    }
+
+
     public LiveData<List<Miernictwo>> getAll(){
        return miernictwoDao.getAllQuestions();
+    }
+    public LiveData<List<Pair>> getAllPair(){
+        return pairDao.getAllQuestions();
     }
     public void update(Miernictwo miernictwo){
         Completable.fromAction(() -> miernictwoDao.update(miernictwo)).subscribeOn(Schedulers.io()).subscribe();
     }
 
+    public void updatePair(Pair pair){
+        Completable.fromAction(() -> pairDao.update(pair)).subscribeOn(Schedulers.io()).subscribe();
+    }
     public LiveData<Integer> getRowCount(){
         return miernictwoDao.getRowCount();
     }

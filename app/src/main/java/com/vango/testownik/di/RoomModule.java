@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.room.Dao.MiernictwoDao;
+import com.vango.testownik.room.Dao.PairDao;
 import com.vango.testownik.room.QuizDatabase;
 
 import javax.inject.Singleton;
@@ -35,5 +36,10 @@ public class RoomModule {
     @Provides
     MiernictwoDao provideMiernictwoDao(QuizDatabase quizDatabase){
         return quizDatabase.miernictwoDao();
+    }
+    @Singleton
+    @Provides
+    PairDao providePairDao(QuizDatabase quizDatabase){
+        return quizDatabase.pairDao();
     }
 }

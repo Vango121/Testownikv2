@@ -30,6 +30,7 @@ import com.vango.testownik.databinding.MainFragmentBinding;
 import com.vango.testownik.model.MainModel;
 import com.vango.testownik.ui.QuizFragment;
 import com.vango.testownik.ui.SettingsFragment;
+import com.vango.testownik.util.QuizNames;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,7 +87,7 @@ public class MainFragment extends Fragment implements MainAdapter.OnNoteListener
         Integer[] logo={R.drawable.miernictwo,R.drawable.air,R.drawable.telekomuna
                 ,R.drawable.pps,R.drawable.pps2,R.drawable.izs,R.drawable.po};
         namee=new ArrayList<>();
-        String []names={"Miernictwo","Pair","Pt","Pps","Pps2","Izs","Po"}; // db names for retrofit
+        String []names={QuizNames.miernictwo,QuizNames.pair,QuizNames.pt,QuizNames.pps,QuizNames.pps2,QuizNames.izs,QuizNames.po}; // db names for retrofit
         namee= Arrays.asList(names);
         mainModels=new ArrayList<>();
         for (int i = 0; i <logo.length; i++) {

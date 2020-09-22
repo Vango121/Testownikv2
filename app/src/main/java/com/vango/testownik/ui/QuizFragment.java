@@ -29,6 +29,7 @@ import com.vango.testownik.databinding.QuizFragmentBinding;
 import com.vango.testownik.model.Answer;
 import com.vango.testownik.model.QuizModel;
 import com.vango.testownik.ui.main.MainFragment;
+import com.vango.testownik.util.QuizNames;
 import com.vango.testownik.util.QuizViewModelFactory;
 
 import java.util.ArrayList;
@@ -144,9 +145,17 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         mViewModel.goodAnswers.observe(getViewLifecycleOwner(), goodAnswers->{
             binding.animateProgressBar.setProgress(goodAnswers);
         });
-        mViewModel.questionsMiernictwo.observe(getViewLifecycleOwner(), miernictwos -> {
-            mViewModel.cast();
-        });
+        if(whichQuiz.equals(QuizNames.miernictwo)){
+            mViewModel.questionsMiernictwo.observe(getViewLifecycleOwner(), miernictwos -> {
+                mViewModel.cast();
+            });
+        }
+        else if(whichQuiz.equals(QuizNames.pair)){
+            mViewModel.questionsPair.observe(getViewLifecycleOwner(), pair->{
+                mViewModel.cast();
+            });
+        }
+
 //        mViewModel.questions.observe(getViewLifecycleOwner(), quizModel -> {
 //            Log.i("tag",quizModel.get(0).getQuestion());
 //        });

@@ -1,6 +1,8 @@
 package com.vango.testownik.model;
 
 import com.vango.testownik.model.room.Miernictwo;
+import com.vango.testownik.model.room.Pair;
+import com.vango.testownik.util.QuizNames;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -102,7 +104,10 @@ public class QuizModel {
     }
 
     public QuizModel cast(String whichQuiz){
-        return new Miernictwo(id,question,answerA,answerB,answerC,answerD);
+        if(whichQuiz.equals(QuizNames.miernictwo)){
+            return new Miernictwo(id,question,answerA,answerB,answerC,answerD);
+        }
+        return new Pair(id,question,answerA,answerB,answerC,answerD);
     }
 
 }

@@ -145,20 +145,43 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         mViewModel.goodAnswers.observe(getViewLifecycleOwner(), goodAnswers->{
             binding.animateProgressBar.setProgress(goodAnswers);
         });
-        if(whichQuiz.equals(QuizNames.miernictwo)){
-            mViewModel.questionsMiernictwo.observe(getViewLifecycleOwner(), miernictwos -> {
-                mViewModel.cast();
-            });
+        switch (whichQuiz) {
+            case QuizNames.miernictwo:
+                mViewModel.questionsMiernictwo.observe(getViewLifecycleOwner(), miernictwos -> {
+                    mViewModel.cast();
+                });
+                break;
+            case QuizNames.pair:
+                mViewModel.questionsPair.observe(getViewLifecycleOwner(), pair -> {
+                    mViewModel.cast();
+                });
+                break;
+            case QuizNames.pt:
+                mViewModel.questionsPt.observe(getViewLifecycleOwner(), pt -> {
+                    mViewModel.cast();
+                });
+                break;
+            case QuizNames.pps:
+                mViewModel.questionsPps.observe(getViewLifecycleOwner(), pps -> {
+                    mViewModel.cast();
+                });
+                break;
+            case QuizNames.pps2:
+                mViewModel.questionsPps2.observe(getViewLifecycleOwner(), pps2 -> {
+                    mViewModel.cast();
+                });
+                break;
+            case QuizNames.izs:
+                mViewModel.questionsIzs.observe(getViewLifecycleOwner(), izs -> {
+                    mViewModel.cast();
+                });
+                break;
+            case QuizNames.po:
+                mViewModel.questionsPo.observe(getViewLifecycleOwner(), po -> {
+                    mViewModel.cast();
+                });
+                break;
         }
-        else if(whichQuiz.equals(QuizNames.pair)){
-            mViewModel.questionsPair.observe(getViewLifecycleOwner(), pair->{
-                mViewModel.cast();
-            });
-        }
-
-//        mViewModel.questions.observe(getViewLifecycleOwner(), quizModel -> {
-//            Log.i("tag",quizModel.get(0).getQuestion());
-//        });
     }
     public void setQuestion(QuizModel question){
         List<Button> buttons = new ArrayList<>();

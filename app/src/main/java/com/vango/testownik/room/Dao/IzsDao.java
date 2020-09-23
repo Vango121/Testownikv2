@@ -1,7 +1,9 @@
 package com.vango.testownik.room.Dao;
 
 import com.vango.testownik.model.Answer;
+import com.vango.testownik.model.room.Izs;
 import com.vango.testownik.model.room.Pair;
+import com.vango.testownik.model.room.Po;
 
 import java.util.List;
 
@@ -13,19 +15,18 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 @Dao
-public interface PairDao {
-
+public interface IzsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insert(Pair pair);
+    public void insert(Izs izs);
 
-    @Query("SELECT * FROM air_table")
-    LiveData<List<Pair>> getAllQuestions();
+    @Query("SELECT * FROM izs_table")
+    LiveData<List<Izs>> getAllQuestions();
     @Update
-    void update(Pair pair);
+    void update(Izs izs);
 
-    @Query("SELECT COUNT(id) FROM air_table")
+    @Query("SELECT COUNT(id) FROM izs_table")
     LiveData<Integer> getRowCount();
 
-    @Query("UPDATE air_table SET question = :question , answerA = :answerA, answerB = :answerB, answerC= :answerC, answerD= :answerD WHERE id = :itemid  ")
+    @Query("UPDATE izs_table SET question = :question , answerA = :answerA, answerB = :answerB, answerC= :answerC, answerD= :answerD WHERE id = :itemid  ")
     void updateWithoutCount(Integer itemid, String question, Answer answerA, Answer answerB, Answer answerC, Answer answerD);
 }

@@ -5,8 +5,13 @@ import android.widget.Button;
 
 import com.vango.testownik.model.Answer;
 import com.vango.testownik.model.QuizModel;
+import com.vango.testownik.model.room.Izs;
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.model.room.Pair;
+import com.vango.testownik.model.room.Po;
+import com.vango.testownik.model.room.Pps;
+import com.vango.testownik.model.room.Pps2;
+import com.vango.testownik.model.room.Pt;
 import com.vango.testownik.repository.Repository;
 import com.vango.testownik.util.Event;
 import com.vango.testownik.util.QuizNames;
@@ -30,15 +35,22 @@ public class QuizViewModel extends ViewModel {
      private MutableLiveData<Event<List<QuizModel>>> _questionsLiveData = new MutableLiveData<>();
     LiveData<Event<List<QuizModel>>> questionsLiveData() {
         return _questionsLiveData;}
-    LiveData<List<Miernictwo>> questionsMiernictwo;
+
+    LiveData<List<Miernictwo>> questionsMiernictwo; // questions from room db
     LiveData<List<Pair>> questionsPair;
-    LiveData<List<QuizModel>> retrofit;
-    MutableLiveData<QuizModel> nextQuestion = new MutableLiveData<>();
-    public MutableLiveData<Integer> questionCount=new MutableLiveData<>(0);
-    public MutableLiveData<Integer> goodAnswers=new MutableLiveData<>(0);
+    LiveData<List<Pt>> questionsPt;
+    LiveData<List<Pps>> questionsPps;
+    LiveData<List<Pps2>> questionsPps2;
+    LiveData<List<Izs>> questionsIzs;
+    LiveData<List<Po>> questionsPo;
+
+    LiveData<List<QuizModel>> retrofit; // questions from web
+    public MutableLiveData<QuizModel> nextQuestion = new MutableLiveData<>();
+    MutableLiveData<Integer> questionCount=new MutableLiveData<>(0);
+    MutableLiveData<Integer> goodAnswers=new MutableLiveData<>(0);
     List<QuizModel> questions = new ArrayList<>();
     Integer repeatsCount; // count all questions including count parameter inside question
-    LiveData<Integer> rowCount;
+    LiveData<Integer> rowCount; // row count in room db
     List<Integer> countList = new ArrayList<>();
     Boolean saveEnabled;
     Integer startingCount; // Count value on start without save
@@ -48,13 +60,11 @@ public class QuizViewModel extends ViewModel {
     public QuizViewModel(Repository repository, SavedStateHandle savedStateHandle) {
         this.repository = repository;
         this.savedStateHandle = savedStateHandle;
-        rowCount=repository.getRowCount();
         QuizModel.wrong=Integer.parseInt(repository.getWrongMultipler());
         saveEnabled=repository.getIsSave();
         startingCount = Integer.parseInt(repository.getStartingCount());
     }
     void getCount(String quizName){
-
         if(saveEnabled){ // is save turned on in settings
             countList =repository.getCount(quizName);
         }
@@ -62,39 +72,116 @@ public class QuizViewModel extends ViewModel {
     }
     void getQuestions(String quizName){
         quizString=quizName;
-        if(quizName.equals(QuizNames.miernictwo)){
-            questionsMiernictwo = repository.getAll();
-        }
-        else if (quizName.equals(QuizNames.pair)){
-            questionsPair = repository.getAllPair();
+        rowCount=repository.getRowCount(quizName);
+        switch (quizName){
+            case QuizNames.miernictwo:
+                questionsMiernictwo = repository.getAll();
+                break;
+            case QuizNames.pair:
+                questionsPair = repository.getAllPair();
+                break;
+            case QuizNames.pps:
+                questionsPps = repository.getAllPps();
+                break;
+            case QuizNames.pps2:
+                questionsPps2 = repository.getAllPps2();
+                break;
+            case QuizNames.pt:
+                questionsPt = repository.getAllPt();
+                break;
+            case QuizNames.izs:
+                questionsIzs = repository.getAllIzs();
+                break;
+            case QuizNames.po:
+                questionsPo = repository.getAllPo();
+                break;
         }
         retrofit= repository.getData(quizName);
     }
 
     void cast(){
         List<QuizModel> quizModelList = new ArrayList<>();
-        if(quizString.equals(QuizNames.miernictwo)){
-            for (int i = 0; i <questionsMiernictwo.getValue().size(); i++) {
-                quizModelList.add(questionsMiernictwo.getValue().get(i).cast("Miernictwo"));
-                if(countList.size()==questionsMiernictwo.getValue().size()){
-                     quizModelList.get(i).setCount(countList.get(i));
-                 }else{
-                    quizModelList.get(i).setCount(startingCount);
+        switch (quizString) {
+            case QuizNames.miernictwo:
+                for (int i = 0; i < questionsMiernictwo.getValue().size(); i++) {
+                    quizModelList.add(questionsMiernictwo.getValue().get(i).cast("Miernictwo"));
+                    if (countList.size() == questionsMiernictwo.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
                 }
-            }
-        _questionsLiveData.postValue(new Event<>(quizModelList));
-        }else if( quizString.equals(QuizNames.pair)){
-            for (int i = 0; i <questionsPair.getValue().size(); i++) {
-                quizModelList.add(questionsPair.getValue().get(i).cast());
-                if(countList.size()==questionsPair.getValue().size()){
-                    quizModelList.get(i).setCount(countList.get(i));
-                }else{
-                    quizModelList.get(i).setCount(startingCount);
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
+            case QuizNames.pair:
+                for (int i = 0; i < questionsPair.getValue().size(); i++) {
+                    quizModelList.add(questionsPair.getValue().get(i).cast());
+                    if (countList.size() == questionsPair.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
                 }
-            }
-            _questionsLiveData.postValue(new Event<>(quizModelList));
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
+            case QuizNames.pt:
+                for (int i = 0; i < questionsPt.getValue().size(); i++) {
+                    quizModelList.add(questionsPt.getValue().get(i).cast());
+                    if (countList.size() == questionsPt.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
+                }
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
+            case QuizNames.pps:
+                for (int i = 0; i < questionsPps.getValue().size(); i++) {
+                    quizModelList.add(questionsPps.getValue().get(i).cast());
+                    if (countList.size() == questionsPps.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
+                }
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
+            case QuizNames.pps2:
+                for (int i = 0; i < questionsPps2.getValue().size(); i++) {
+                    quizModelList.add(questionsPps2.getValue().get(i).cast());
+                    if (countList.size() == questionsPps2.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
+                }
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
+            case QuizNames.izs:
+                for (int i = 0; i < questionsIzs.getValue().size(); i++) {
+                    quizModelList.add(questionsIzs.getValue().get(i).cast());
+                    if (countList.size() == questionsIzs.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
+                }
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
+            case QuizNames.po:
+                for (int i = 0; i < questionsPo.getValue().size(); i++) {
+                    quizModelList.add(questionsPo.getValue().get(i).cast());
+                    if (countList.size() == questionsPo.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
+                }
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
         }
     }
+
     void setQuestions(List<QuizModel> list){
         questions= list;
     }
@@ -114,31 +201,62 @@ public class QuizViewModel extends ViewModel {
     void updateRetrofit(List<QuizModel> list, String quizName){
 
             for (int i = 0; i <list.size(); i++) {
-                if(quizName.equals(QuizNames.miernictwo)){
-                repository.update((Miernictwo)list.get(i).cast(quizName));
-                }
-                else if(quizName.equals(QuizNames.pair)){
-                    repository.updatePair((Pair)retrofit.getValue().get(i));
+                switch (quizName) {
+                    case QuizNames.miernictwo:
+                        repository.update((Miernictwo) list.get(i).cast(quizName));
+                        break;
+                    case QuizNames.pair:
+                        repository.updatePair((Pair) retrofit.getValue().get(i).cast(QuizNames.pair));
+                        break;
+                    case QuizNames.pt:
+                        repository.updatePt((Pt) retrofit.getValue().get(i).cast(QuizNames.pt));
+                        break;
+                    case QuizNames.pps:
+                        repository.updatePps((Pps) retrofit.getValue().get(i).cast(QuizNames.pps));
+                        break;
+                    case QuizNames.pps2:
+                        repository.updatePps2((Pps2) retrofit.getValue().get(i).cast(QuizNames.pps2));
+                        break;
+                    case QuizNames.izs:
+                        repository.updateIzs((Izs) retrofit.getValue().get(i).cast(QuizNames.izs));
+                        break;
+                    case QuizNames.po:
+                        repository.updatePo((Po) retrofit.getValue().get(i).cast(QuizNames.po));
+                        break;
                 }
             }
     }
     void insert(String quizName){
-
             for (int i = 0; i <retrofit.getValue().size() ; i++) {
-                if(quizName.equals(QuizNames.miernictwo)){
-                repository.insert((Miernictwo) retrofit.getValue().get(i).cast(quizName));
-                }
-                else if(quizName.equals(QuizNames.pair)){
-                   repository.insertPair((Pair)retrofit.getValue().get(i).cast(quizName));
+                switch (quizName) {
+                    case QuizNames.miernictwo:
+                        repository.insert((Miernictwo) retrofit.getValue().get(i).cast(quizName));
+                        break;
+                    case QuizNames.pair:
+                        repository.insertPair((Pair) retrofit.getValue().get(i).cast(quizName));
+                        break;
+                    case QuizNames.pt:
+                        repository.insertPt((Pt) retrofit.getValue().get(i).cast(quizName));
+                        break;
+                    case QuizNames.pps:
+                        repository.insertPps((Pps) retrofit.getValue().get(i).cast(quizName));
+                        break;
+                    case QuizNames.pps2:
+                        repository.insertPps2((Pps2) retrofit.getValue().get(i).cast(quizName));
+                        break;
+                    case QuizNames.izs:
+                        repository.insertIzs((Izs) retrofit.getValue().get(i).cast(quizName));
+                        break;
+                    case QuizNames.po:
+                        repository.insertPo((Po) retrofit.getValue().get(i).cast(quizName));
+                        break;
                 }
             }
-
     }
 
     void nextQuestion(){
         Log.i("repeats",repeatsCount+"");
         if(repeatsCount!=0){
-
             Log.i("nextquestion","true");
             Random rand = new Random();
             int nextId = rand.nextInt((questions.size()) );
@@ -161,7 +279,7 @@ public class QuizViewModel extends ViewModel {
            Answer answer= (Answer) buttons[i].getTag();
            if(answer.getCorrect()!=buttonsChecked[i]) {
                questions.get(currentId).answerWrong();
-               repeatsCount+=3;
+               repeatsCount+=QuizModel.wrong;
                return false;
            }
         }

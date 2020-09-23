@@ -8,14 +8,26 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vango.testownik.model.QuizModel;
+import com.vango.testownik.model.room.Izs;
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.model.room.Pair;
+import com.vango.testownik.model.room.Po;
+import com.vango.testownik.model.room.Pps;
+import com.vango.testownik.model.room.Pps2;
+import com.vango.testownik.model.room.Pt;
+import com.vango.testownik.room.Dao.IzsDao;
 import com.vango.testownik.room.Dao.MiernictwoDao;
 import com.vango.testownik.room.Dao.PairDao;
+import com.vango.testownik.room.Dao.PoDao;
+import com.vango.testownik.room.Dao.Pps2Dao;
+import com.vango.testownik.room.Dao.PpsDao;
+import com.vango.testownik.room.Dao.PtDao;
+import com.vango.testownik.util.QuizNames;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.inject.Inject;
 
@@ -34,13 +46,29 @@ public class Repository {
     MiernictwoDao miernictwoDao;
     Context context;
     PairDao pairDao;
+    PtDao ptDao;
+    PpsDao ppsDao;
+    Pps2Dao pps2Dao;
+    IzsDao izsDao;
+    PoDao poDao;
     private MutableLiveData<List<QuizModel>> questions = new MutableLiveData<>();
     @Inject
-    public Repository(Retrofit retrofit, MiernictwoDao miernictwoDao, PairDao pairDao, @ApplicationContext Context context) {
+    public Repository(Retrofit retrofit,
+                      MiernictwoDao miernictwoDao,
+                      PairDao pairDao,PtDao ptDao,
+                      PpsDao ppsDao,Pps2Dao pps2Dao,
+                      IzsDao izsDao,
+                      PoDao poDao,
+                      @ApplicationContext Context context) {
         this.retrofit = retrofit;
         this.miernictwoDao=miernictwoDao;
         this.context=context;
         this.pairDao=pairDao;
+        this.ptDao=ptDao;
+        this.ppsDao=ppsDao;
+        this.pps2Dao=pps2Dao;
+        this.izsDao=izsDao;
+        this.poDao=poDao;
     }
     public LiveData<List<QuizModel>> getData(String table){
         Call<List<QuizModel>> call= retrofit.getRetrofitInterface().getQuestions(table);
@@ -59,11 +87,24 @@ public class Repository {
     }
     public void insert(Miernictwo miernictwo){
             Completable.fromAction(() -> miernictwoDao.insert(miernictwo)).subscribeOn(Schedulers.io()).subscribe();
-        //miernictwoDao.insert(miernictwo);
     }
     public void insertPair(Pair pair){
         Completable.fromAction(() -> pairDao.insert(pair)).subscribeOn(Schedulers.io()).subscribe();
-        //miernictwoDao.insert(miernictwo);
+    }
+    public void insertPt(Pt pt){
+        Completable.fromAction(() -> ptDao.insert(pt)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void insertPps(Pps pps){
+        Completable.fromAction(() -> ppsDao.insert(pps)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void insertPps2(Pps2 pps2){
+        Completable.fromAction(() -> pps2Dao.insert(pps2)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void insertIzs(Izs izs){
+        Completable.fromAction(() -> izsDao.insert(izs)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void insertPo(Po po){
+        Completable.fromAction(() -> poDao.insert(po)).subscribeOn(Schedulers.io()).subscribe();
     }
 
 
@@ -73,15 +114,54 @@ public class Repository {
     public LiveData<List<Pair>> getAllPair(){
         return pairDao.getAllQuestions();
     }
+    public LiveData<List<Pps>> getAllPps(){
+        return ppsDao.getAllQuestions();
+    }
+    public LiveData<List<Pps2>> getAllPps2(){
+        return pps2Dao.getAllQuestions();
+    }
+    public LiveData<List<Pt>> getAllPt(){
+        return ptDao.getAllQuestions();
+    }
+    public LiveData<List<Izs>> getAllIzs(){
+        return izsDao.getAllQuestions();
+    }
+    public LiveData<List<Po>> getAllPo(){
+        return poDao.getAllQuestions();
+    }
+
     public void update(Miernictwo miernictwo){
         Completable.fromAction(() -> miernictwoDao.update(miernictwo)).subscribeOn(Schedulers.io()).subscribe();
     }
-
     public void updatePair(Pair pair){
         Completable.fromAction(() -> pairDao.update(pair)).subscribeOn(Schedulers.io()).subscribe();
     }
-    public LiveData<Integer> getRowCount(){
-        return miernictwoDao.getRowCount();
+    public void updatePt(Pt pt){
+        Completable.fromAction(() -> ptDao.update(pt)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void updatePps(Pps pps){
+        Completable.fromAction(() -> ppsDao.update(pps)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void updatePps2(Pps2 pps2){
+        Completable.fromAction(() -> pps2Dao.update(pps2)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void updatePo(Po po){
+        Completable.fromAction(() -> poDao.update(po)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public void updateIzs(Izs izs){
+        Completable.fromAction(() -> izsDao.update(izs)).subscribeOn(Schedulers.io()).subscribe();
+    }
+    public LiveData<Integer> getRowCount(String quizName){
+        switch (quizName){
+            case QuizNames.miernictwo: return miernictwoDao.getRowCount();
+            case QuizNames.pair: return pairDao.getRowCount();
+            case QuizNames.pt: return ptDao.getRowCount();
+            case QuizNames.pps: return ppsDao.getRowCount();
+            case QuizNames.pps2: return pps2Dao.getRowCount();
+            case QuizNames.izs: return izsDao.getRowCount();
+            case QuizNames.po: return poDao.getRowCount();
+        }
+        throw new NoSuchElementException("Can't find such quiz");
     }
 
     public void saveCount(List<QuizModel> list,String quizName){

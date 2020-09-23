@@ -3,8 +3,13 @@ package com.vango.testownik.di;
 import android.content.Context;
 
 import com.vango.testownik.model.room.Miernictwo;
+import com.vango.testownik.room.Dao.IzsDao;
 import com.vango.testownik.room.Dao.MiernictwoDao;
 import com.vango.testownik.room.Dao.PairDao;
+import com.vango.testownik.room.Dao.PoDao;
+import com.vango.testownik.room.Dao.Pps2Dao;
+import com.vango.testownik.room.Dao.PpsDao;
+import com.vango.testownik.room.Dao.PtDao;
 import com.vango.testownik.room.QuizDatabase;
 
 import javax.inject.Singleton;
@@ -42,4 +47,35 @@ public class RoomModule {
     PairDao providePairDao(QuizDatabase quizDatabase){
         return quizDatabase.pairDao();
     }
+
+    @Singleton
+    @Provides
+    PtDao providePtDao(QuizDatabase quizDatabase){
+        return quizDatabase.ptDao();
+    }
+
+    @Singleton
+    @Provides
+    PpsDao providePpsDao(QuizDatabase quizDatabase){
+        return quizDatabase.ppsDao();
+    }
+
+    @Singleton
+    @Provides
+    Pps2Dao providePps2Dao(QuizDatabase quizDatabase){
+        return quizDatabase.pps2Dao();
+    }
+
+    @Singleton
+    @Provides
+    IzsDao provideIzsDao(QuizDatabase quizDatabase){
+        return quizDatabase.izsDao();
+    }
+
+    @Singleton
+    @Provides
+    PoDao providePoDao(QuizDatabase quizDatabase){
+        return quizDatabase.poDao();
+    }
+
 }

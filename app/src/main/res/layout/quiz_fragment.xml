@@ -129,7 +129,7 @@
         android:id="@+id/licznik"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Ilosc : 5"
+        android:text="Pozostałe powtórzenia: "
         android:gravity="center"
         android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@id/question"

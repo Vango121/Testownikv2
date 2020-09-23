@@ -1,8 +1,15 @@
 package com.vango.testownik.model;
 
+import com.vango.testownik.model.room.Izs;
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.model.room.Pair;
+import com.vango.testownik.model.room.Po;
+import com.vango.testownik.model.room.Pps;
+import com.vango.testownik.model.room.Pps2;
+import com.vango.testownik.model.room.Pt;
 import com.vango.testownik.util.QuizNames;
+
+import java.util.NoSuchElementException;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -87,7 +94,9 @@ public class QuizModel {
         this.answerD = answerD;
     }
 
-
+    public String countForLayout(){
+        return "Pozostałe powtórzenia: "+ count;
+    }
     public Integer getCount() {
         return count;
     }
@@ -104,10 +113,23 @@ public class QuizModel {
     }
 
     public QuizModel cast(String whichQuiz){
-        if(whichQuiz.equals(QuizNames.miernictwo)){
-            return new Miernictwo(id,question,answerA,answerB,answerC,answerD);
+        switch (whichQuiz) {
+            case QuizNames.miernictwo:
+                return new Miernictwo(id, question, answerA, answerB, answerC, answerD);
+            case QuizNames.pair:
+                return new Pair(id, question, answerA, answerB, answerC, answerD);
+            case QuizNames.pt:
+                return new Pt(id, question, answerA, answerB, answerC, answerD);
+            case QuizNames.pps:
+                return new Pps(id, question, answerA, answerB, answerC, answerD);
+            case QuizNames.pps2:
+                return new Pps2(id, question, answerA, answerB, answerC, answerD);
+            case QuizNames.izs:
+                return new Izs(id, question, answerA, answerB, answerC, answerD);
+            case QuizNames.po:
+                return new Po(id, question, answerA, answerB, answerC, answerD);
         }
-        return new Pair(id,question,answerA,answerB,answerC,answerD);
+        throw new NoSuchElementException("Can't find such quizname");
     }
 
 }

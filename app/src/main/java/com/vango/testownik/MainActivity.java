@@ -7,8 +7,10 @@ import androidx.fragment.app.FragmentManager;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.vango.testownik.ui.main.MainFragment;
 
 import javax.inject.Inject;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.container, mainFragment)
                     .commitNow();
         }
+        Log.d("Firebase", "token "+ FirebaseInstanceId.getInstance().getToken());
     }
     public void replaceFragment(Class fragmentClass, String nameToPass){
         Fragment fragment = null;

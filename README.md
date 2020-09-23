@@ -9,3 +9,4 @@ Second version of "Testownik" (Work in Progress)
 - Recycler View 
 - Hilt ( Dependency injection)
 - Retrofit2 
+- Firebase Cloud Messaging 

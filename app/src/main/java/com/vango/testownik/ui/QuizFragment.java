@@ -1,7 +1,6 @@
 package com.vango.testownik.ui;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.graphics.Color;
@@ -66,18 +65,8 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#5C92FD")));
          whichQuiz = getArguments().getString("Quiz");
 
-        Toast.makeText(getContext(), whichQuiz, Toast.LENGTH_SHORT).show();
-//        mViewModel = new ViewModelProvider(this,quizViewModelFactory).get(QuizViewModel.class);
         binding.setHandler(this);
         binding.setViewmodel(mViewModel);
-//        mViewModel.getQuestions(whichQuiz);
-//        mViewModel.questions.observe(getViewLifecycleOwner(), quizModel -> {
-//            mViewModel.nextQuestion();
-//        });
-//        mViewModel.nextQuestion.observe(getViewLifecycleOwner(),question->{
-//            setQuestion(question);
-//            currentquestion=question;
-//                });
         return view;
     }
 
@@ -122,19 +111,6 @@ public class QuizFragment extends Fragment implements ButtonHandler{
                 mViewModel.updateRetrofit(quizModels,whichQuiz);
             }
         });
-//        mViewModel.questionsLiveData.observe(getViewLifecycleOwner(), quizModel -> {
-//            quizModel.getContentIfNotHandled()
-//            mViewModel.setQuestions(quizModel);
-//            mViewModel.getNumberOfQuestions();
-//            if (rowcount == 0) {
-//                mViewModel.insert(whichQuiz);
-//            }
-//            else {
-//                mViewModel.update(whichQuiz);
-//            }
-//            //mViewModel.nextQuestion();
-//
-//        });
         mViewModel.nextQuestion.observe(getViewLifecycleOwner(),question->{
             setQuestion(question);
             currentquestion=question;
@@ -228,10 +204,6 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         binding.Next.setVisibility(View.VISIBLE);
     }
 
-//    private boolean buttonA = false;
-//    private boolean buttonB = false;
-//    private boolean buttonC = false;
-//    private boolean buttonD = false;
     @Override
     public void buttonClick(View view){
         switch (view.getId()){

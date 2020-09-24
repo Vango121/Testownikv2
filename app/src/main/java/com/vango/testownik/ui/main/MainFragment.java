@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
@@ -84,8 +85,8 @@ public class MainFragment extends Fragment implements MainAdapter.OnNoteListener
     }
 
     public void setRecyclerView(){
-        Integer[] logo={R.drawable.miernictwo,R.drawable.air,R.drawable.telekomuna
-                ,R.drawable.pps,R.drawable.pps2,R.drawable.izs,R.drawable.po};
+    Integer[] logo={R.drawable.miernictwo2,R.drawable.air2,R.drawable.pt2
+            ,R.drawable.pps22,R.drawable.pps22,R.drawable.izs2,R.drawable.po2};
         namee=new ArrayList<>();
         String []names={QuizNames.miernictwo,QuizNames.pair,QuizNames.pt,QuizNames.pps,QuizNames.pps2,QuizNames.izs,QuizNames.po}; // db names for retrofit
         namee= Arrays.asList(names);
@@ -94,9 +95,8 @@ public class MainFragment extends Fragment implements MainAdapter.OnNoteListener
             MainModel model = new MainModel(logo[i],names[i]);
             mainModels.add(model);
         }
-        LinearLayoutManager layoutManager = new LinearLayoutManager(
-                getContext(),LinearLayoutManager.HORIZONTAL,false);
-        binding.recycler.setLayoutManager(layoutManager);
+
+        binding.recycler.setLayoutManager(new GridLayoutManager(getContext().getApplicationContext(),2));
         binding.recycler.setItemAnimator(new DefaultItemAnimator());
         mainAdapter= new MainAdapter(getContext(),mainModels,this);
         binding.recycler.setAdapter(mainAdapter);

@@ -27,5 +27,7 @@
         android:summaryOn="Zapis postępu włączony. Kliknij, aby wyłączyć"
         android:summaryOff="Zapis postępu wyłączony. Kliknij, aby włączyć"
         />
-
+    <Preference
+        android:title="Contribution"
+        android:summary="Icons made by Kiranshastry, Eucalyp, catkuro, Freepik from www.flaticon.com"/>
 </androidx.preference.PreferenceScreen>

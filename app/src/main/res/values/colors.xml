@@ -9,4 +9,5 @@
     <color name="buttonColor">#85AEFF</color>
     <color name="buttonClicked">#B0CBFF</color>
     <color name="test">#5C92FD</color>
+    <color name="cardViewBackground">#F1F1F1</color>
 </resources>

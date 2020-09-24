@@ -27,15 +27,21 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_item,viewGroup,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_row,viewGroup,false);
         return new ViewHolder(view,mOnNoteListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-    //viewHolder.imageView.setImageResource(mainModels.get(i).getLogo());
     viewHolder.imageView.setBackgroundResource(mainModels.get(i).getLogo());
-    //viewHolder.textView.setText(mainModels.get(i).getName());
+    String to_set = mainModels.get(i).getName();
+    switch (to_set){
+        case "Po": to_set="P obiektowe";
+        break;
+        case "Pps2": to_set = "Pps 2"; break;
+        case "Pt": to_set = "P telekomunikacji"; break;
+    }
+    viewHolder.textView.setText(to_set);
     }
 
     @Override
@@ -50,8 +56,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView, OnNoteListener onNoteListener){
             super(itemView);
             this.onNoteListener=onNoteListener;
-            imageView=itemView.findViewById(R.id.recycler_image);
-            //textView=itemView.findViewById(R.id.recycler_textView);
+            imageView=itemView.findViewById(R.id.imageRecycler);
+            textView=itemView.findViewById(R.id.txtRecycler);
             itemView.setOnClickListener(this);
         }
 

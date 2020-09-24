@@ -2,6 +2,7 @@ package com.vango.testownik.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.vango.testownik.MainActivity;
 import com.vango.testownik.R;
@@ -10,6 +11,7 @@ import com.vango.testownik.ui.main.MainFragment;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     @Override

@@ -8,4 +8,5 @@ public abstract class QuizNames {
     public static final String pps2= "Pps2";
     public static final String izs= "Izs";
     public static final String po= "Po";
+    public static final String kodowanie="Kodowanie";
 }

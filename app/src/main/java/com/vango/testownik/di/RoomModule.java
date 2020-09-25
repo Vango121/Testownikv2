@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.room.Dao.IzsDao;
+import com.vango.testownik.room.Dao.KodowanieDao;
 import com.vango.testownik.room.Dao.MiernictwoDao;
 import com.vango.testownik.room.Dao.PairDao;
 import com.vango.testownik.room.Dao.PoDao;
@@ -31,7 +32,7 @@ public class RoomModule {
                 .databaseBuilder(
                         context,
                         QuizDatabase.class,
-                "quiz_db4")
+                "quiz_db")
                 .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
                 .build();
@@ -76,6 +77,12 @@ public class RoomModule {
     @Provides
     PoDao providePoDao(QuizDatabase quizDatabase){
         return quizDatabase.poDao();
+    }
+
+    @Singleton
+    @Provides
+    KodowanieDao provideKodowanieDao(QuizDatabase quizDatabase){
+        return quizDatabase.kodowanieDao();
     }
 
 }

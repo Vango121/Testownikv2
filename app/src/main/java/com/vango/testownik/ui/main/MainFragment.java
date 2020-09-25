@@ -2,7 +2,6 @@ package com.vango.testownik.ui.main;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import dagger.hilt.android.AndroidEntryPoint;
 
 import android.view.LayoutInflater;
@@ -86,9 +83,9 @@ public class MainFragment extends Fragment implements MainAdapter.OnNoteListener
 
     public void setRecyclerView(){
     Integer[] logo={R.drawable.miernictwo2,R.drawable.air2,R.drawable.pt2
-            ,R.drawable.pps22,R.drawable.pps22,R.drawable.izs2,R.drawable.po2};
+            ,R.drawable.pps22,R.drawable.pps22,R.drawable.izs2,R.drawable.po2,R.drawable.kodowanie2};
         namee=new ArrayList<>();
-        String []names={QuizNames.miernictwo,QuizNames.pair,QuizNames.pt,QuizNames.pps,QuizNames.pps2,QuizNames.izs,QuizNames.po}; // db names for retrofit
+        String []names={QuizNames.miernictwo,QuizNames.pair,QuizNames.pt,QuizNames.pps,QuizNames.pps2,QuizNames.izs,QuizNames.po,QuizNames.kodowanie}; // db names for retrofit
         namee= Arrays.asList(names);
         mainModels=new ArrayList<>();
         for (int i = 0; i <logo.length; i++) {

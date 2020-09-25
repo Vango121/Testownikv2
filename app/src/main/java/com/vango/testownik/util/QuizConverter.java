@@ -24,7 +24,6 @@ public class QuizConverter implements JsonDeserializer<List<QuizModel>> {
     public List<QuizModel> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         Type type =new TypeToken<List<RetrofitModel>>(){}.getType();
         List<RetrofitModel> questionlist = new Gson().fromJson(json,type);
-        Log.i("test1",questionlist.get(0).getQuestion());
         List<QuizModel> list = new ArrayList<>();
         for (int i = 0; i <questionlist.size(); i++) {
             list.add(new QuizModel(questionlist.get(i).getId(),questionlist.get(i).getQuestion(),
@@ -32,7 +31,6 @@ public class QuizConverter implements JsonDeserializer<List<QuizModel>> {
                     new Gson().fromJson(questionlist.get(i).getAnswerB(), Answer.class),
                     new Gson().fromJson(questionlist.get(i).getAnswerC(), Answer.class),
                     new Gson().fromJson(questionlist.get(i).getAnswerD(), Answer.class)));
-            Log.i("answinConverter", list.get(i).getAnswerA().getAnswer()+ "    "+ i);
         }
 
         return list;

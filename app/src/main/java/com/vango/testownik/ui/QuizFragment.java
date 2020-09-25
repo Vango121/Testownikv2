@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import dagger.hilt.android.AndroidEntryPoint;
 import es.dmoral.toasty.Toasty;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -90,12 +89,10 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         mViewModel.getQuestions(whichQuiz);
         mViewModel.rowCount.observe(getViewLifecycleOwner(), integer ->{
             rowcount=integer;
-            Log.i("rowcount",integer+"");
                 }
         );
         mViewModel.questionsLiveData().observe(getViewLifecycleOwner(),event->{
             List<QuizModel> quizModel= event.getContentIfNotHandled();
-            Log.i("quizModel",quizModel.size()+"");
             mViewModel.setQuestions(quizModel);
             mViewModel.getNumberOfQuestions();
             if(binding.buttonA.getText().equals("Button")){
@@ -105,7 +102,6 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         mViewModel.retrofit.observe(getViewLifecycleOwner(),quizModels -> {
             if (rowcount == 0) {
                 mViewModel.insert(whichQuiz);
-                Log.i("insert","insert");
             }
             else {
                 mViewModel.updateRetrofit(quizModels,whichQuiz);
@@ -157,7 +153,15 @@ public class QuizFragment extends Fragment implements ButtonHandler{
                     mViewModel.cast();
                 });
                 break;
+            case QuizNames.kodowanie:
+                mViewModel.questionsKodowanie.observe(getViewLifecycleOwner(), po -> {
+                    mViewModel.cast();
+                });
+                break;
         }
+        mViewModel.isFinished.observe(getViewLifecycleOwner(),isFinished->{
+            if(isFinished) Toasty.success(getContext().getApplicationContext(),"Gratulacje ukończyłeś testownik");
+        });
     }
     public void setQuestion(QuizModel question){
         List<Button> buttons = new ArrayList<>();

@@ -1,11 +1,11 @@
 package com.vango.testownik.ui;
 
-import android.util.Log;
 import android.widget.Button;
 
 import com.vango.testownik.model.Answer;
 import com.vango.testownik.model.QuizModel;
 import com.vango.testownik.model.room.Izs;
+import com.vango.testownik.model.room.Kodowanie;
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.model.room.Pair;
 import com.vango.testownik.model.room.Po;
@@ -43,11 +43,13 @@ public class QuizViewModel extends ViewModel {
     LiveData<List<Pps2>> questionsPps2;
     LiveData<List<Izs>> questionsIzs;
     LiveData<List<Po>> questionsPo;
+    LiveData<List<Kodowanie>> questionsKodowanie;
 
     LiveData<List<QuizModel>> retrofit; // questions from web
     public MutableLiveData<QuizModel> nextQuestion = new MutableLiveData<>();
     MutableLiveData<Integer> questionCount=new MutableLiveData<>(0);
     MutableLiveData<Integer> goodAnswers=new MutableLiveData<>(0);
+    MutableLiveData<Boolean> isFinished = new MutableLiveData<>(false);
     List<QuizModel> questions = new ArrayList<>();
     Integer repeatsCount; // count all questions including count parameter inside question
     LiveData<Integer> rowCount; // row count in room db
@@ -94,6 +96,9 @@ public class QuizViewModel extends ViewModel {
                 break;
             case QuizNames.po:
                 questionsPo = repository.getAllPo();
+                break;
+            case QuizNames.kodowanie:
+                questionsKodowanie = repository.getAllKodowanie();
                 break;
         }
         retrofit= repository.getData(quizName);
@@ -179,6 +184,17 @@ public class QuizViewModel extends ViewModel {
                 }
                 _questionsLiveData.postValue(new Event<>(quizModelList));
                 break;
+            case QuizNames.kodowanie:
+                for (int i = 0; i < questionsKodowanie.getValue().size(); i++) {
+                    quizModelList.add(questionsKodowanie.getValue().get(i).cast());
+                    if (countList.size() == questionsKodowanie.getValue().size()) {
+                        quizModelList.get(i).setCount(countList.get(i));
+                    } else {
+                        quizModelList.get(i).setCount(startingCount);
+                    }
+                }
+                _questionsLiveData.postValue(new Event<>(quizModelList));
+                break;
         }
     }
 
@@ -223,6 +239,9 @@ public class QuizViewModel extends ViewModel {
                     case QuizNames.po:
                         repository.updatePo((Po) retrofit.getValue().get(i).cast(QuizNames.po));
                         break;
+                    case QuizNames.kodowanie:
+                        repository.updateKodowanie((Kodowanie) retrofit.getValue().get(i).cast(QuizNames.kodowanie));
+                        break;
                 }
             }
     }
@@ -250,17 +269,17 @@ public class QuizViewModel extends ViewModel {
                     case QuizNames.po:
                         repository.insertPo((Po) retrofit.getValue().get(i).cast(quizName));
                         break;
+                    case QuizNames.kodowanie:
+                        repository.insertKodowanie((Kodowanie) retrofit.getValue().get(i).cast(quizName));
+                        break;
                 }
             }
     }
 
     void nextQuestion(){
-        Log.i("repeats",repeatsCount+"");
         if(repeatsCount!=0){
-            Log.i("nextquestion","true");
             Random rand = new Random();
             int nextId = rand.nextInt((questions.size()) );
-            Log.i("nextint",nextId+"");
             if(questions.get(nextId).getCount()!=0){
                 nextQuestion.setValue(questions.get(nextId));
             }
@@ -270,7 +289,7 @@ public class QuizViewModel extends ViewModel {
             currentId=nextId;
         }
         else{
-            Log.i("koniec","koniec");
+            isFinished.postValue(true);
         }
     }
     public Boolean checkAnswers(Button[] buttons, boolean[] buttonsChecked){

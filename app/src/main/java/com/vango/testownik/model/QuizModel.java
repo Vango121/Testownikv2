@@ -1,6 +1,7 @@
 package com.vango.testownik.model;
 
 import com.vango.testownik.model.room.Izs;
+import com.vango.testownik.model.room.Kodowanie;
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.model.room.Pair;
 import com.vango.testownik.model.room.Po;
@@ -128,6 +129,8 @@ public class QuizModel {
                 return new Izs(id, question, answerA, answerB, answerC, answerD);
             case QuizNames.po:
                 return new Po(id, question, answerA, answerB, answerC, answerD);
+            case QuizNames.kodowanie:
+                return new Kodowanie(id,question,answerA,answerB,answerC,answerD);
         }
         throw new NoSuchElementException("Can't find such quizname");
     }

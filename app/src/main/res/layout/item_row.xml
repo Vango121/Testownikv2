@@ -8,9 +8,10 @@
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_130sdp"
+        android:layout_height="@dimen/_150sdp"
         android:layout_gravity="center"
+        android:padding="@dimen/_5sdp"
         app:cardCornerRadius="15dp"
         app:cardElevation="8dp"
         app:cardBackgroundColor="@color/cardViewBackground">
@@ -18,11 +19,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_gravity="center"
         android:padding="5dp">
         <ImageView
             android:id="@+id/imageRecycler"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_115sdp"
+            android:gravity="center"
             android:background="@drawable/miernictwo2"/>
 
         <TextView
@@ -30,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/raleway_bold"
-            android:padding="1dp"
+            android:padding="3dp"
             android:layout_gravity="center_horizontal"
             android:text="Miernictwo"
             android:textColor="@color/common_google_signin_btn_text_light_pressed"

@@ -3,12 +3,13 @@ package com.vango.testownik.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vango.testownik.model.QuizModel;
 import com.vango.testownik.model.room.Izs;
+import com.vango.testownik.model.room.Kodowanie;
 import com.vango.testownik.model.room.Miernictwo;
 import com.vango.testownik.model.room.Pair;
 import com.vango.testownik.model.room.Po;
@@ -16,6 +17,7 @@ import com.vango.testownik.model.room.Pps;
 import com.vango.testownik.model.room.Pps2;
 import com.vango.testownik.model.room.Pt;
 import com.vango.testownik.room.Dao.IzsDao;
+import com.vango.testownik.room.Dao.KodowanieDao;
 import com.vango.testownik.room.Dao.MiernictwoDao;
 import com.vango.testownik.room.Dao.PairDao;
 import com.vango.testownik.room.Dao.PoDao;
@@ -51,6 +53,7 @@ public class Repository {
     Pps2Dao pps2Dao;
     IzsDao izsDao;
     PoDao poDao;
+    KodowanieDao kodowanieDao;
     private MutableLiveData<List<QuizModel>> questions = new MutableLiveData<>();
     @Inject
     public Repository(Retrofit retrofit,
@@ -59,6 +62,7 @@ public class Repository {
                       PpsDao ppsDao,Pps2Dao pps2Dao,
                       IzsDao izsDao,
                       PoDao poDao,
+                      KodowanieDao kodowanieDao,
                       @ApplicationContext Context context) {
         this.retrofit = retrofit;
         this.miernictwoDao=miernictwoDao;
@@ -69,6 +73,7 @@ public class Repository {
         this.pps2Dao=pps2Dao;
         this.izsDao=izsDao;
         this.poDao=poDao;
+        this.kodowanieDao=kodowanieDao;
     }
     public LiveData<List<QuizModel>> getData(String table){
         Call<List<QuizModel>> call= retrofit.getRetrofitInterface().getQuestions(table);
@@ -80,7 +85,6 @@ public class Repository {
 
             @Override
             public void onFailure(Call<List<QuizModel>> call, Throwable t) {
-            Log.i("t",t.getMessage());
             }
         });
         return questions;
@@ -106,6 +110,9 @@ public class Repository {
     public void insertPo(Po po){
         Completable.fromAction(() -> poDao.insert(po)).subscribeOn(Schedulers.io()).subscribe();
     }
+    public void insertKodowanie(Kodowanie kodowanie){
+        Completable.fromAction(() -> kodowanieDao.insert(kodowanie)).subscribeOn(Schedulers.io()).subscribe();
+    }
 
 
     public LiveData<List<Miernictwo>> getAll(){
@@ -129,6 +136,9 @@ public class Repository {
     public LiveData<List<Po>> getAllPo(){
         return poDao.getAllQuestions();
     }
+    public LiveData<List<Kodowanie>> getAllKodowanie(){
+        return kodowanieDao.getAllQuestions();
+    }
 
     public void update(Miernictwo miernictwo){
         Completable.fromAction(() -> miernictwoDao.update(miernictwo)).subscribeOn(Schedulers.io()).subscribe();
@@ -151,6 +161,10 @@ public class Repository {
     public void updateIzs(Izs izs){
         Completable.fromAction(() -> izsDao.update(izs)).subscribeOn(Schedulers.io()).subscribe();
     }
+    public void updateKodowanie(Kodowanie kodowanie){
+        Completable.fromAction(() -> kodowanieDao.update(kodowanie)).subscribeOn(Schedulers.io()).subscribe();
+    }
+
     public LiveData<Integer> getRowCount(String quizName){
         switch (quizName){
             case QuizNames.miernictwo: return miernictwoDao.getRowCount();
@@ -160,6 +174,7 @@ public class Repository {
             case QuizNames.pps2: return pps2Dao.getRowCount();
             case QuizNames.izs: return izsDao.getRowCount();
             case QuizNames.po: return poDao.getRowCount();
+            case QuizNames.kodowanie: return kodowanieDao.getRowCount();
         }
         throw new NoSuchElementException("Can't find such quiz");
     }
@@ -175,11 +190,9 @@ public class Repository {
     public List<Integer> getCount(String quizName){
         SharedPreferences sharedPreferences =PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         String sharedReturned =sharedPreferences.getString(quizName+"count","");
-        Log.i("shared",sharedReturned);
         Type type =new TypeToken<List<Integer>>(){}.getType();
         if(!sharedReturned.equals("")){
             List<Integer>some_list = new Gson().fromJson(sharedReturned,type);
-            Log.i("shared",some_list.size()+" reposi");
             return some_list;
         }
         return new ArrayList<>();

@@ -56,6 +56,7 @@ public class QuizViewModel extends ViewModel {
     List<Integer> countList = new ArrayList<>();
     Boolean saveEnabled;
     Integer startingCount; // Count value on start without save
+    MutableLiveData<Integer> progress = new MutableLiveData<>(); // progress saved for progressbar
     String quizString;
 
     @ViewModelInject
@@ -69,6 +70,10 @@ public class QuizViewModel extends ViewModel {
     void getCount(String quizName){
         if(saveEnabled){ // is save turned on in settings
             countList =repository.getCount(quizName);
+            questionCount.postValue(repository.getQuestionCount(quizName));
+            goodAnswers.postValue(repository.getProgress(quizName));
+        }else {
+            repository.resetData(quizName);
         }
 
     }
@@ -203,7 +208,11 @@ public class QuizViewModel extends ViewModel {
     }
 
     void saveCount(String quizName){
-        repository.saveCount(questions,quizName);
+        if(saveEnabled){
+            repository.saveCount(questions,quizName);
+            repository.saveProgress(quizName,goodAnswers.getValue());
+            repository.saveQuestionCount(quizName,questionCount.getValue());
+        }
     }
 
 

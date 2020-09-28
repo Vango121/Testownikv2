@@ -2,6 +2,7 @@ package com.vango.testownik.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 
 import com.google.gson.Gson;
@@ -209,12 +210,28 @@ public class Repository {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getString("Multiply","5");
     }
-    public void saveProgress(String quizName){
+    public void saveProgress(String quizName, int progress){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        sharedPreferences.edit().putInt(quizName+"progress",0);
+        sharedPreferences.edit().putInt(quizName+"progress",progress).apply();
     }
     public int getProgress(String quizName){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getInt(quizName+"progress",0);
+    }
+    public void saveQuestionCount(String quizName, int count){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        sharedPreferences.edit().putInt(quizName+"countQuestion",count).apply();
+    }
+    public int getQuestionCount(String quizName){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return sharedPreferences.getInt(quizName+"countQuestion",0);
+    }
+    public void resetData(String quizName){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(quizName+"countQuestion");
+        editor.remove(quizName+"progress");
+        editor.remove(quizName+"count");
+        editor.apply();
     }
 }

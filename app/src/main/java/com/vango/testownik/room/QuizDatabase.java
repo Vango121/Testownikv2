@@ -21,7 +21,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Miernictwo.class, Pair.class, Pt.class, Pps.class, Pps2.class, Izs.class, Po.class, Kodowanie.class}, version = 1)
+@Database(entities = {Miernictwo.class, Pair.class, Pt.class, Pps.class, Pps2.class, Izs.class, Po.class, Kodowanie.class}, version = 1,exportSchema = false)
 @TypeConverters(Converter.class)
 public abstract class QuizDatabase extends RoomDatabase {
     public abstract MiernictwoDao miernictwoDao();

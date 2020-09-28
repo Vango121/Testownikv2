@@ -2,7 +2,6 @@ package com.vango.testownik.repository;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 
 import com.google.gson.Gson;
@@ -35,6 +34,7 @@ import javax.inject.Inject;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 import dagger.hilt.android.qualifiers.ApplicationContext;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
@@ -184,11 +184,11 @@ public class Repository {
         for (int i = 0; i <list.size(); i++) {
             listCount.add(list.get(i).getCount());
         }
-        SharedPreferences sharedPreferences =PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         sharedPreferences.edit().putString(quizName+"count",new Gson().toJson(listCount)).apply();
     }
     public List<Integer> getCount(String quizName){
-        SharedPreferences sharedPreferences =PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         String sharedReturned =sharedPreferences.getString(quizName+"count","");
         Type type =new TypeToken<List<Integer>>(){}.getType();
         if(!sharedReturned.equals("")){
@@ -198,15 +198,23 @@ public class Repository {
         return new ArrayList<>();
     }
     public boolean getIsSave(){
-        SharedPreferences sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getBoolean("Autosave",true);
     }
     public String getWrongMultipler(){
-        SharedPreferences sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getString("Wrong","3");
     }
     public String getStartingCount(){
-        SharedPreferences sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         return sharedPreferences.getString("Multiply","5");
+    }
+    public void saveProgress(String quizName){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        sharedPreferences.edit().putInt(quizName+"progress",0);
+    }
+    public int getProgress(String quizName){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        return sharedPreferences.getInt(quizName+"progress",0);
     }
 }

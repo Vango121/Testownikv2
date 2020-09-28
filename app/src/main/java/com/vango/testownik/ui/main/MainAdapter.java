@@ -39,7 +39,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         case "Po": to_set="P obiektowe";
         break;
         case "Pps2": to_set = "Pps 2"; break;
-        case "Pt": to_set = "P telekomunikacji"; break;
+        case "Pt": to_set = "Podstawy telekomunikacji"; break ;
     }
     viewHolder.textView.setText(to_set);
     }

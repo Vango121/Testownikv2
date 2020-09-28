@@ -14,7 +14,6 @@ public class MessageService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-        Log.i("firebase",s);
     }
 
     @Override

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import dagger.hilt.android.AndroidEntryPoint;
 import es.dmoral.toasty.Toasty;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +64,7 @@ public class QuizFragment extends Fragment implements ButtonHandler{
         getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#5C92FD")));
          whichQuiz = getArguments().getString("Quiz");
-
+         binding.Check.setEnabled(false);
         binding.setHandler(this);
         binding.setViewmodel(mViewModel);
         return view;
@@ -96,6 +97,9 @@ public class QuizFragment extends Fragment implements ButtonHandler{
             mViewModel.setQuestions(quizModel);
             mViewModel.getNumberOfQuestions();
             if(binding.buttonA.getText().equals("Button")){
+                binding.Check.setText("Sprawdz");
+                binding.Check.setEnabled(true);
+                binding.progressBar.setVisibility(View.GONE);
                 mViewModel.nextQuestion();
             }
         });
@@ -191,7 +195,7 @@ public class QuizFragment extends Fragment implements ButtonHandler{
 
     @Override
     public void checkAnswers(View view){
-        Toasty.Config.getInstance().allowQueue(false).apply();
+        Toasty.Config.getInstance().allowQueue(false).toastyGravity(Gravity.BOTTOM,0,5).apply();
         Button[] buttons = {binding.buttonA,binding.buttonB,binding.buttonC,binding.buttonD};
         boolean isCorrect = mViewModel.checkAnswers(buttons,buttonsChecked);
         for (int i = 0; i <buttons.length; i++) {

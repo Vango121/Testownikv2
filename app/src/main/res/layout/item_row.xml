@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="@dimen/_130sdp"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_height="@dimen/_163sdp"
         android:layout_gravity="center"
         android:padding="@dimen/_5sdp"
         app:cardCornerRadius="15dp"
@@ -33,11 +33,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/raleway_bold"
-            android:padding="3dp"
-            android:layout_gravity="center_horizontal"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
             android:text="Miernictwo"
             android:textColor="@color/common_google_signin_btn_text_light_pressed"
-            android:textSize="18sp" />
+            android:textSize="@dimen/_15sdp" />
 
     </LinearLayout>
     </androidx.cardview.widget.CardView>

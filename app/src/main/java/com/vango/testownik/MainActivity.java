@@ -25,10 +25,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, mainFragment)
+                    .replace(R.id.container, mainFragment,"mainFragment")
                     .commitNow();
         }
-        Log.d("Firebase", "token "+ FirebaseInstanceId.getInstance().getToken());
     }
     public void replaceFragment(Class fragmentClass, String nameToPass){
         Fragment fragment = null;
@@ -44,6 +43,18 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.container, fragment)
                 .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!mainFragment.isVisible()){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.container, mainFragment)
+                    .commit();
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 
     @Override

@@ -1,5 +1,5 @@
 ## Testownik
-Second version of "Testownik" (Work in Progress)
+Second version of "Testownik" https://play.google.com/store/apps/details?id=com.vango.testownik&hl=pl
 
 ### Technologies
 - Fragments
@@ -9,4 +9,5 @@ Second version of "Testownik" (Work in Progress)
 - Recycler View 
 - Hilt ( Dependency injection)
 - Retrofit2 
+- Room
 - Firebase Cloud Messaging 

@@ -11,3 +11,4 @@ Second version of "Testownik" https://play.google.com/store/apps/details?id=com.
 - Retrofit2 
 - Room
 - Firebase Cloud Messaging 
+- RxJava
